@@ -1,0 +1,106 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<tittle>Geolocation ����</tittle>
+<script language="javascript">  
+        function verify_geolocation_capability()  
+        {  
+           if (navigator.geolocation)  
+           {  
+              document.form1.capability.value = "Enabled";  
+           }  
+           else  
+           {  
+              document.form1.capability.value = "Not Enabled";  
+           }  
+        }  
+      
+        function display_geolocation_properties(position)  
+        {  
+           document.form1.capability.value = "W o r k i n g . . .";  
+           document.form1.latitude.value = position.coords.latitude;  
+           document.form1.longitude.value = position.coords.longitude;  
+        }  
+      
+        function handle_error(error)  
+        {  
+           document.form1.capability.value = "ERROR: " + error.code;  
+        }  
+      
+        function retrieve_location()  
+        {  
+           if (navigator.geolocation)  
+           {  
+              document.form1.capability.value = "Starting...";  
+              navigator.geolocation.getCurrentPosition(display_geolocation_properties, handle_error);  
+              document.form1.capability.value = "Finished";  
+           }  
+           else  
+           {  
+              alert("This browser does not support geolocation services.");  
+           }  
+        }  
+      </script>
+<style>
+#mydiv {
+	height: 900px;
+	width: 900px;
+	background-color: #CCC;
+}
+</style>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCZvwk3jjfnRD0vtbi6KGxis - mLajckrZw"></script>
+<script type="text/javascript">
+	//var key = AIzaSyCZvwk3jjfnRD0vtbi6KGxis - mLajckrZw
+	//var key = AIzaSyCZvwk3jjfnRD0vtbi6KGxis;
+	var lng, lat;
+	if (!navigator.geolocation) {
+		alert("geolocation not supported");
+	} else {
+		navigator.geolocation.getCurrentPosition(success, error);
+	}
+	function success(position) {
+		lng = position.coords.longitude;
+		lat = position.coords.latitude;
+
+		showMap(document.getElementById('mydiv'), lng, lat);
+	}
+	function showMap(div, lng, lat) {
+		var cpos = new google.maps.LatLng(lat, lng);
+
+		var opt = {
+			zoom : 18,
+			center : cpos,
+			mapTypeId : google.maps.MapTypeId.ROADMAP
+		}
+		var map = new google.maps.Map(div, opt);
+		map.setTilt(0);
+		var marker = new google.maps.Marker({
+			position : cpos,
+			tittle : "myposition"
+		});
+		marker.setMap(map);
+	}
+
+	function error(error) {
+		alert(error.code);
+	}
+</script>
+<head>
+<body onload="verify_geolocation_capability()">  
+     
+      
+      <form name="form1" id="form1">  
+        Geolocation use: <input type="text" name="capability" value="stop">  
+        <p />  
+        Latitude:  <input type="text" name="latitude">  
+        <p />  
+        Longitude: <input type="text" name="longitude">  
+        <p />  
+        <input type="button" name="submit" value="Get Latitude and Longitude" onclick="retrieve_location()">  
+      </form>  
+      
+    
+	<div id="mydiv"></div>
+</body>
+</html>
